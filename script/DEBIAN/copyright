@@ -1,0 +1,9 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: script
+Source:
+
+
+Files: *
+Copyright: 2025 Maksym Lavryshchev. All rights reserved.
+License: MIT
+ License text... some text about license... for example... permisssion to use,modify, and distribute this software.
