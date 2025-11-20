@@ -1,0 +1,8 @@
+Package: script
+Maintainer: Maksym Lavryshev
+Version: 1.0
+Section: unknown
+Priority: optional
+Architecture: all
+Description: This script counts number of files in the /etc directory.
+
