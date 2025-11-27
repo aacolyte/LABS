@@ -1,0 +1,35 @@
+version: "3.9"
+services:
+  jenkins-master:
+    build:
+      context: .
+      dockerfile: Dockerfile.jenkins_master
+    container_name: jenkins-master
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - jenkins
+
+  jenkins-builder:
+    build:
+      context: .
+      dockerfile: Dockerfile.builder
+    container_name: jenkins-builder
+    networks:
+      - jenkins
+
+volumes:
+  jenkins_home:
+
+networks:
+  jenkins:
+    driver: bridge
+
+
+
+
+    
