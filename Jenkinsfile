@@ -13,20 +13,14 @@ pipeline {
       }
     }
 
-       stage('Run Script in Builder') {
-            steps {
-                sh '''
-                docker run --rm -v $PWD:/workspace -w /workspace jenkins-builder:latest bash -c "
-                if [ -f package.rpm ]; then
-                    sudo rpm -ivh package.rpm
-                fi
-                if [ -f package.deb ]; then
-                    sudo dpkg -i package.deb || sudo apt-get install -f -y
-                fi
-                ./script.sh
-                "
+    stage('Run Script in Builder') {
+      steps {
+        sh '''\'docker run --rm -v $PWD:/workspace -w /workspace jenkins-builder:latest bash ./script.sh\'
+
+
                 '''
-            }
-        }
+      }
     }
+
+  }
 }
