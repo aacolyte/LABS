@@ -7,24 +7,11 @@ pipeline {
 
   }
   stages {
-    stage('Prepare sources') {
+    stage('test stage') {
       steps {
-        sh 'git clone https://github.com/aacolyte/LABS.git .'
-      }
-    }
-
-    stage('Prepare packages') {
-      steps {
-        sh '''sudo apt-get update
-sudo apt-get install -y rpm
-'''
-      }
-    }
-
-    stage('Run script') {
-      steps {
-        sh '''chmod +x script.sh
-./script.sh
+        sh '''echo "Hello from builder"
+whoami
+ls -la
 '''
       }
     }
