@@ -1,7 +1,12 @@
 FROM jenkins/jenkins:lts
 RUN jenkins-plugin-cli --plugins docker-workflow git
 USER root
-RUN apt-get update && \
-    apt-get install -y docker.io && \
-    usermod -aG docker jenkins
+RUN jenkins-plugin-cli --plugins \
+    docker-workflow:1.42 \
+    pipeline:2.6 \
+    git:4.15.1 \
+    credentials-binding:1.27
+USER root
+RUN apt-get update && apt-get install -y docker.io
+RUN usermod -aG docker jenkins
 USER jenkins
