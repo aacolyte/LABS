@@ -36,30 +36,30 @@ pipeline {
     }
 }
     
-    stage('Build RPM') {
-            steps {
-                sh """
-                docker run --rm -u 0 jenkins-builder:latest bash -c '
-                    mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
-                    cp script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
-                    cp script_rpm/SOURCES/script.sh rpmbuild/SOURCES/ &&
-                    rpmbuild -bb rpmbuild/SPECS/script.spec --define "_topdir /home/jenkins/rpmbuild"
-                '
-                """
-            }
-            post {
-                always {
-                    sh """
-                    docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c '
-                        mkdir -p /workspace/rpms &&
-                        cp -r /home/jenkins/rpmbuild/RPMS/* /workspace/rpms/ &&
-                        chown -R $(id -u):$(id -g) /workspace/rpms
-                    '
-                    """
-                    archiveArtifacts artifacts: 'rpms/**/*.rpm', fingerprint: true
-                }
-            }
+  stage('Build RPM') {
+    steps {
+        sh """
+        docker run --rm -u 0 jenkins-builder:latest bash -c '
+            mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
+            cp /home/jenkins/script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
+            cp /home/jenkins/script_rpm/SOURCES/script.sh rpmbuild/SOURCES/ &&
+            rpmbuild -bb rpmbuild/SPECS/script.spec --define "_topdir /home/jenkins/rpmbuild"
+        '
+        """
+    }
+    post {
+        always {
+            sh """
+            docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c '
+                mkdir -p /workspace/rpms &&
+                cp -r /home/jenkins/rpmbuild/RPMS/* /workspace/rpms/ &&
+                chown -R $(id -u):$(id -g) /workspace/rpms
+            '
+            """
+            archiveArtifacts artifacts: 'rpms/**/*.rpm', fingerprint: true
         }
+    }
+}
     stage('Build DEB') {
                 steps {
                     sh '''
