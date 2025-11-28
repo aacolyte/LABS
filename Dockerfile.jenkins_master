@@ -1,10 +1,16 @@
 FROM jenkins/jenkins:lts
+
 USER root
-RUN apt-get update && apt-get install -y docker.io
+
+RUN apt-get update && \
+    apt-get install -y docker.io docker-compose-plugin
+
 RUN usermod -aG docker jenkins
+
 RUN jenkins-plugin-cli --plugins \
     docker-workflow \
     git \
     credentials-binding \
     workflow-aggregator
+
 USER jenkins
