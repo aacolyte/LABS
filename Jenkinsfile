@@ -24,10 +24,14 @@ pipeline {
       }
     }
     
-    stage('Check script_rpm in Docker') {
+    tage('Check container workspace') {
     steps {
         sh """
-        docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest ls -R script
+        echo "Workspace on host: \$WORKSPACE"
+        docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
+            echo 'Files and folders in /workspace inside container:'
+            ls -R
+        "
         """
     }
 }
