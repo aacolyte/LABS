@@ -55,21 +55,26 @@ stage('Build RPM') {
         }
     }
 }
-    stage('Build DEB') {
-                steps {
-                    sh '''
-                    docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
-                        mkdir -p debs/BUILD debs/DEBS &&
-                        dpkg-deb --build script debs/
-                    "
-                    '''
-                }
-                post {
-                    always {
-                        archiveArtifacts artifacts: 'debs/**/*.deb', fingerprint: true
-                    }
-                }
-            }
+ stage('Build DEB') {
+    steps {
+        sh '''
+        docker run --name builder_tmp_deb -u 0 jenkins-builder:latest bash -c "
+            mkdir -p /home/jenkins/deb_build &&
+            cp -r /home/jenkins/script /home/jenkins/deb_build/ &&
+            dpkg-deb --build /home/jenkins/deb_build /home/jenkins/deb_build/script.deb
+        "
+        docker cp builder_tmp_deb:/home/jenkins/deb_build/script.deb $WORKSPACE/debs/
+
+        docker rm builder_tmp_deb
+        '''
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'debs/**/*.deb', fingerprint: true
+        }
+    }
+}
+
     
       stage('Push Artifacts to Repo') {
       steps {
