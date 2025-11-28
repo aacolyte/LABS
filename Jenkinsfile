@@ -24,17 +24,6 @@ pipeline {
       }
     }
     
-    stage('Check container workspace') {
-    steps {
-        sh """
-        echo "Workspace on host: \$WORKSPACE"
-        docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
-            echo 'Files and folders in /workspace inside container:'
-            ls -R
-        "
-        """
-    }
-}
     
 stage('Build RPM') {
     steps {
