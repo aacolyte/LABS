@@ -25,8 +25,7 @@ pipeline {
     }
     stage('Check workspace') {
     steps {
-        sh 'ls -la $WORKSPACE'
-        sh 'ls -la $WORKSPACE/script_rpm || echo "script_rpm missing!"'
+         sh 'docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest ls -la script_rpm/SPECS'
     }
 }
     
