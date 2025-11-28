@@ -26,14 +26,16 @@ pipeline {
     
     stage('Build RPM') {
     steps {
-       sh """
-      docker run --rm -u 0 -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c \"
-      mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
-      cp script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
-      cp -r script_rpm/* rpmbuild/SOURCES/ &&
-      rpmbuild -bb rpmbuild/SPECS/script.spec --define \\\"_topdir \$WORKSPACE/rpmbuild\\\"
-      \"
-      """
+      sh """
+        echo "Workspace: \$WORKSPACE"
+        ls -R \$WORKSPACE/script_rpm
+        docker run --rm -u 0 -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c \"
+        mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
+        cp script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
+        cp -r script_rpm/* rpmbuild/SOURCES/ &&
+        rpmbuild -bb rpmbuild/SPECS/script.spec --define \\\"_topdir \$WORKSPACE/rpmbuild\\\"
+    \"
+    """
     }
     post {
         always {
