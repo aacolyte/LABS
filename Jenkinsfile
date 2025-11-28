@@ -91,6 +91,8 @@ stage('Push Artifacts to Repo') {
 
                 cp artifacts/rpms/*.rpm .
                 cp artifacts/debs/*.deb .
+                git config user.email "jenkins@ci.local"
+                git config user.name "Jenkins"
                 git add *.rpm *.deb || true
                 git commit -m "Add built RPMs and DEBs" || true
                 git push https://$USER:$TOKEN@github.com/aacolyte/LABS.git
