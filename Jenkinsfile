@@ -88,6 +88,12 @@ stage('Push Artifacts to Repo') {
                 cp rpms/noarch/*.rpm artifacts/rpms/
                 
                 cp debs/*.deb artifacts/debs/
+
+                cp artifacts/rpms/*.rpm .
+                cp artifacts/debs/*.deb .
+                git add *.rpm *.deb || true
+                git commit -m "Add built RPMs and DEBs" || true
+                git push https://$USER:$TOKEN@github.com/aacolyte/LABS.git
             '''
         }
     }
