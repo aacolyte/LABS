@@ -23,11 +23,6 @@ pipeline {
         sh 'docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash /home/jenkins/script.sh'
       }
     }
-    stage('Check workspace') {
-    steps {
-         sh 'docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest ls -la script_rpm/SPECS'
-    }
-}
     
     stage('Build RPM') {
     steps {
