@@ -37,22 +37,28 @@ pipeline {
 }
     
     stage('Build RPM') {
-    steps {
-      sh """
-        docker run --rm -u 0 -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c \"
-        mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
-        cp script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
-        cp -r script_rpm/* rpmbuild/SOURCES/ &&
-        rpmbuild -bb rpmbuild/SPECS/script.spec --define \\\"_topdir \$WORKSPACE/rpmbuild\\\"
-    \"
-    """
-    }
-    post {
-        always {
-            archiveArtifacts artifacts: 'rpmbuild/RPMS/**/*.rpm', fingerprint: true
+            steps {
+                sh """
+                docker run --rm -u 0 jenkins-builder:latest bash -c '
+                    mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
+                    cp script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
+                    cp -r script_rpm/* rpmbuild/SOURCES/ &&
+                    rpmbuild -bb rpmbuild/SPECS/script.spec --define "_topdir /home/jenkins/rpmbuild"
+                '
+                """
+            }
+            post {
+                always {
+                    sh """
+                    docker run --rm -v \$WORKSPACE:/workspace jenkins-builder:latest bash -c '
+                        mkdir -p /workspace/rpms
+                        cp -r /home/jenkins/rpmbuild/RPMS/* /workspace/rpms/
+                    '
+                    """
+                    archiveArtifacts artifacts: 'rpms/**/*.rpm', fingerprint: true
+                }
+            }
         }
-    }
-}
     stage('Build DEB') {
                 steps {
                     sh '''
