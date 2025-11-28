@@ -1,6 +1,11 @@
 pipeline {
   agent any
   stages {
+    stage('Clean Workspace') {
+    steps {
+        deleteDir()  
+    }
+}
     stage('Checkout') {
       steps {
         git(branch: 'main', credentialsId: 'token_token', url: 'https://github.com/aacolyte/LABS.git')
