@@ -3,8 +3,9 @@ services:
   jenkins-master:
     build:
       context: .
-      dockerfile: Dockerfile.master
+      dockerfile: Dockerfile.jenkins_master
     container_name: jenkins-master
+    user: root
     ports:
       - "8080:8080"
     volumes:
@@ -20,15 +21,12 @@ services:
     container_name: jenkins-builder
     networks:
       - jenkins
-    depends_on:
-      - jenkins-master
+    tty: true
 
 volumes:
   jenkins_home:
 
 networks:
   jenkins:
-
-
 
     
