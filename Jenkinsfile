@@ -24,11 +24,17 @@ pipeline {
       }
     }
     
+    stage('Check script_rpm in Docker') {
+    steps {
+        sh """
+        docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest ls -R script_rpm
+        """
+    }
+}
+    
     stage('Build RPM') {
     steps {
       sh """
-        echo "Workspace: \$WORKSPACE"
-        ls -R \$WORKSPACE/script_rpm
         docker run --rm -u 0 -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c \"
         mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
         cp script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
