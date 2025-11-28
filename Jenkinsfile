@@ -50,9 +50,10 @@ pipeline {
             post {
                 always {
                     sh """
-                    docker run --rm -v \$WORKSPACE:/workspace jenkins-builder:latest bash -c '
-                        mkdir -p /workspace/rpms
-                        cp -r /home/jenkins/rpmbuild/RPMS/* /workspace/rpms/
+                    docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c '
+                        mkdir -p /workspace/rpms &&
+                        cp -r /home/jenkins/rpmbuild/RPMS/* /workspace/rpms/ &&
+                        chown -R $(id -u):$(id -g) /workspace/rpms
                     '
                     """
                     archiveArtifacts artifacts: 'rpms/**/*.rpm', fingerprint: true
