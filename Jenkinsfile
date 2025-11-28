@@ -79,30 +79,19 @@ stage('Build DEB') {
 }
 
     
-     stage('Push Artifacts to Repo') {
+stage('Push Artifacts to Repo') {
     steps {
-        withCredentials([usernamePassword(credentialsId: 'mytoken', usernameVariable: 'USER', passwordVariable: 'TOKEN')]){
+        withCredentials([usernamePassword(credentialsId: 'mytoken', usernameVariable: 'USER', passwordVariable: 'TOKEN')]) {
             sh '''
                 mkdir -p artifacts/rpms artifacts/debs
-               
-               ls -R .
-
-                echo "===== RPMs ====="
-                ls -R rpms || true
-
-                echo "===== DEBs ====="
-                ls -R debs || true
-
-
-
-                cp rpms/RPMS/**/*.rpm artifacts/rpms/
-
+                
+                cp rpms/noarch/*.rpm artifacts/rpms/
+                
                 cp debs/*.deb artifacts/debs/
             '''
         }
     }
 }
-
     
   }
 }
