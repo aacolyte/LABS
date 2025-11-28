@@ -84,6 +84,16 @@ stage('Build DEB') {
         withCredentials([usernamePassword(credentialsId: 'mytoken', usernameVariable: 'USER', passwordVariable: 'TOKEN')]){
             sh '''
                 mkdir -p artifacts/rpms artifacts/debs
+               
+               ls -R .
+
+                echo "===== RPMs ====="
+                ls -R rpms || true
+
+                echo "===== DEBs ====="
+                ls -R debs || true
+
+
 
                 cp rpms/RPMS/**/*.rpm artifacts/rpms/
 
