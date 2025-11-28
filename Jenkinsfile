@@ -9,16 +9,13 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
-        sh 'docker build -t jenkins-builder:latest'
+        sh 'docker build -t jenkins-builder:latest .'
       }
     }
 
     stage('Run Script in Builder') {
       steps {
-        sh '''\'docker run --rm -v $PWD:/workspace -w /workspace jenkins-builder:latest bash ./script.sh\'
-
-
-                '''
+        sh 'docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash /home/jenkins/script.sh'
       }
     }
 
