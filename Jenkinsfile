@@ -22,7 +22,7 @@ pipeline {
     stage('Build RPM') {
     steps {
         sh '''
-        docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
+        docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
             mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
             cp script\\ rpm/*.spec rpmbuild/SPECS/ &&
             cp -r script\\ rpm/* rpmbuild/SOURCES/ &&
@@ -39,7 +39,7 @@ pipeline {
     stage('Build DEB') {
                 steps {
                     sh '''
-                    docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
+                    docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
                         mkdir -p debs/BUILD debs/DEBS &&
                         dpkg-deb --build script debs/
                     "
