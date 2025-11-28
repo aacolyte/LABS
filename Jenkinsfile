@@ -27,7 +27,7 @@ pipeline {
     stage('Check script_rpm in Docker') {
     steps {
         sh """
-        docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest ls -R script_rpm
+        docker run --rm -v \$WORKSPACE:/workspace -w /workspace jenkins-builder:latest ls -R script
         """
     }
 }
