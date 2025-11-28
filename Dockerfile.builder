@@ -10,5 +10,6 @@ WORKDIR /home/jenkins
 
 COPY script.sh .
 RUN chmod +x script.sh
+COPY script_rpm /home/jenkins/script_rpm
 
 USER jenkins
