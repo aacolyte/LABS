@@ -24,7 +24,7 @@ pipeline {
       }
     }
     
-    tage('Check container workspace') {
+    stage('Check container workspace') {
     steps {
         sh """
         echo "Workspace on host: \$WORKSPACE"
