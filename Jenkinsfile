@@ -18,6 +18,57 @@ pipeline {
         sh 'docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash /home/jenkins/script.sh'
       }
     }
+    
+    stage('Build RPM') {
+    steps {
+        sh '''
+        docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
+            mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
+            cp script\\ rpm/*.spec rpmbuild/SPECS/ &&
+            cp -r script\\ rpm/* rpmbuild/SOURCES/ &&
+            rpmbuild -bb rpmbuild/SPECS/script.spec --define '_topdir $(pwd)/rpmbuild'
+        "
+        '''
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: 'rpmbuild/RPMS/**/*.rpm', fingerprint: true
+        }
+    }
+}
+    stage('Build DEB') {
+                steps {
+                    sh '''
+                    docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
+                        mkdir -p debs/BUILD debs/DEBS &&
+                        dpkg-deb --build script debs/
+                    "
+                    '''
+                }
+                post {
+                    always {
+                        archiveArtifacts artifacts: 'debs/**/*.deb', fingerprint: true
+                    }
+                }
+            }
+    
+      stage('Push Artifacts to Repo') {
+      steps {
+          withCredentials([string(credentialsId: 'token_token', variable: 'GH_TOKEN')]) {
+              sh '''
+              mkdir -p artifacts/rpms artifacts/debs
+              cp rpmbuild/RPMS/**/*.rpm artifacts/rpms/
+              cp debs/**/*.deb artifacts/debs/
+  
+              git add artifacts/*
+              git commit -m "Add build artifacts from Jenkins"
 
+              git push https://$GH_TOKEN@github.com/aacolyte/LABS.git HEAD:main
+              '''
+          }
+      }
+  }
+
+    
   }
 }
