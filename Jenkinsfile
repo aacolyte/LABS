@@ -79,22 +79,19 @@ stage('Build DEB') {
 }
 
     
-      stage('Push Artifacts to Repo') {
-      steps {
-          withCredentials([usernamePassword(credentialsId: 'mytoken', usernameVariable: 'USER', passwordVariable: 'TOKEN')]){
-              sh '''
-              mkdir -p artifacts/rpms artifacts/debs
-              cp rpmbuild/RPMS/**/*.rpm artifacts/rpms/
-              cp debs/**/*.deb artifacts/debs/
-  
-              git add artifacts/*
-              git commit -m "Add build artifacts from Jenkins"
+     stage('Push Artifacts to Repo') {
+    steps {
+        withCredentials([string(credentialsId: 'mytoken', variable: 'TOKEN')]) {
+            sh '''
+                mkdir -p artifacts/rpms artifacts/debs
 
-              git push https://$GH_TOKEN@github.com/aacolyte/LABS.git HEAD:main
-              '''
-          }
-      }
-  }
+                cp rpms/RPMS/**/*.rpm artifacts/rpms/
+
+                cp debs/*.deb artifacts/debs/
+            '''
+        }
+    }
+}
 
     
   }
