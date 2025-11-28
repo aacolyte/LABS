@@ -81,7 +81,7 @@ stage('Build DEB') {
     
      stage('Push Artifacts to Repo') {
     steps {
-        withCredentials([string(credentialsId: 'mytoken', variable: 'TOKEN')]) {
+        withCredentials([usernamePassword(credentialsId: 'mytoken', usernameVariable: 'USER', passwordVariable: 'TOKEN')]){
             sh '''
                 mkdir -p artifacts/rpms artifacts/debs
 
