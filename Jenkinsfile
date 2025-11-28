@@ -81,7 +81,7 @@ stage('Build DEB') {
     
       stage('Push Artifacts to Repo') {
       steps {
-          withCredentials([string(credentialsId: 'token__mmmmmmm', variable: 'GH_TOKEN')]) {
+          withCredentials([string(credentialsId: 'mytoken', variable: 'GH_TOKEN')]) {
               sh '''
               mkdir -p artifacts/rpms artifacts/debs
               cp rpmbuild/RPMS/**/*.rpm artifacts/rpms/
