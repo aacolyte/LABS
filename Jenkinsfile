@@ -47,18 +47,13 @@ stage('Build RPM') {
         "
         '''
     }
-    post {
-        always {
-            sh '''
-            docker run --rm -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
-                mkdir -p /workspace/rpms &&
-                cp -r /home/jenkins/rpmbuild/RPMS/* /workspace/rpms/ &&
-                chown -R $(id -u):$(id -g) /workspace/rpms
-            "
-            '''
-            archiveArtifacts artifacts: 'rpms/**/*.rpm', fingerprint: true
-        }
-    }
+    sh "docker cp builder_tmp:/home/jenkins/rpmbuild/RPMS ."
+
+
+sh "docker rm builder_tmp"
+
+
+archiveArtifacts artifacts: 'RPMS/**/*.rpm', fingerprint: true
 }
     stage('Build DEB') {
                 steps {
