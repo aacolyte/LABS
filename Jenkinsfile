@@ -60,9 +60,7 @@ stage('Build DEB') {
         sh '''
         docker rm -f builder_tmp_deb || true
         docker run --name builder_tmp_deb -u 0 jenkins-builder:latest bash -c "
-            mkdir -p /home/jenkins/deb_build &&
-            cp -r /home/jenkins/script /home/jenkins/deb_build/ &&
-            dpkg-deb --build /home/jenkins/deb_build /home/jenkins/deb_build/script.deb
+            dpkg-deb --build /home/jenkins/script /home/jenkins/script.deb
         "
         mkdir -p $WORKSPACE/debs
         docker cp builder_tmp_deb:/home/jenkins/deb_build/script.deb $WORKSPACE/debs/
