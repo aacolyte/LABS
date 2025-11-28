@@ -38,24 +38,20 @@ pipeline {
     
 stage('Build RPM') {
     steps {
-    sh '''
-    docker run --name builder_tmp -u 0 jenkins-builder:latest bash -c "
-        mkdir -p /home/jenkins/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
-        cp /home/jenkins/script_rpm/SPECS/script.spec /home/jenkins/rpmbuild/SPECS/ &&
-        cp /home/jenkins/script_rpm/SOURCES/script.sh /home/jenkins/rpmbuild/SOURCES/ &&
-        rpmbuild -bb /home/jenkins/rpmbuild/SPECS/script.spec --define '_topdir /home/jenkins/rpmbuild'
-    "
-    docker cp builder_tmp:/home/jenkins/rpmbuild/RPMS $WORKSPACE/rpms
-    docker rm builder_tmp
-    '''
-
-        sh 'docker cp builder_tmp:/home/jenkins/rpmbuild/RPMS ./RPMS'
-
-        sh 'docker rm builder_tmp'
+        sh '''
+        docker run --name builder_tmp -u 0 jenkins-builder:latest bash -c "
+            mkdir -p /home/jenkins/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
+            cp /home/jenkins/script_rpm/SPECS/script.spec /home/jenkins/rpmbuild/SPECS/ &&
+            cp /home/jenkins/script_rpm/SOURCES/script.sh /home/jenkins/rpmbuild/SOURCES/ &&
+            rpmbuild -bb /home/jenkins/rpmbuild/SPECS/script.spec --define '_topdir /home/jenkins/rpmbuild'
+        "
+        docker cp builder_tmp:/home/jenkins/rpmbuild/RPMS $WORKSPACE/rpms
+        docker rm builder_tmp
+        '''
     }
     post {
         always {
-            archiveArtifacts artifacts: 'RPMS/**/*.rpm', fingerprint: true
+            archiveArtifacts artifacts: 'rpms/**/*.rpm', fingerprint: true
         }
     }
 }
