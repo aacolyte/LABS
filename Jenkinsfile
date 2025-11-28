@@ -24,8 +24,8 @@ pipeline {
         sh '''
         docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
             mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
-            cp script\\ rpm/*.spec rpmbuild/SPECS/ &&
-            cp -r script\\ rpm/* rpmbuild/SOURCES/ &&
+            cp script_rpm/*.spec rpmbuild/SPECS/
+            cp -r script_rpm/* rpmbuild/SOURCES/
             rpmbuild -bb rpmbuild/SPECS/script.spec --define '_topdir $(pwd)/rpmbuild'
         "
         '''
