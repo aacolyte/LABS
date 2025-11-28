@@ -42,7 +42,7 @@ pipeline {
                 docker run --rm -u 0 jenkins-builder:latest bash -c '
                     mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS} &&
                     cp script_rpm/SPECS/script.spec rpmbuild/SPECS/ &&
-                    cp -r script_rpm/* rpmbuild/SOURCES/ &&
+                    cp script_rpm/SOURCES/script.sh rpmbuild/SOURCES/ &&
                     rpmbuild -bb rpmbuild/SPECS/script.spec --define "_topdir /home/jenkins/rpmbuild"
                 '
                 """
