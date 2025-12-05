@@ -28,6 +28,7 @@ jobs:
 
         mkdir -p artifacts/rpms
         cp -r ~/rpmbuild/RPMS/* artifacts/rpms/
+        сp -r ~/rpmbuild/SRPMS/* artifacts/rpms/
 
     - name: Build DEB
       run: |
@@ -54,7 +55,7 @@ jobs:
       env:
         MY_SECRET: ${{ secrets.MY_SECRET }} 
       run: |
-        git config user.name "GitHub Actions"
+        git config user.name "aacolyte"
         git config user.email "actions@github.com"
         git add artifacts/
         git commit -m "Add built RPMs and DEBs"
