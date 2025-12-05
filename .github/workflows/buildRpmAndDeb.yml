@@ -50,10 +50,10 @@ jobs:
         
     - name: Commit and push artifacts
       env:
-        my_secret: ${{ secrets.my_secret }} 
+        MY_SECRET: ${{ secrets.MY_SECRET }} 
       run: |
         git config user.name "GitHub Actions"
         git config user.email "actions@github.com"
         git add artifacts/
         git commit -m "Add built RPMs and DEBs"
-        git push https://$my_secret@github.com/aacolyte/LABS.git main
+        git push https://$MY_SECRET@github.com/aacolyte/LABS.git main
