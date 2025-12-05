@@ -37,13 +37,13 @@ jobs:
         mv script.deb artifacts/debs/
 
     - name: Upload RPM artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: rpm-packages
         path: artifacts/rpms
 
     - name: Upload DEB artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: deb-packages
         path: artifacts/debs
