@@ -2,6 +2,8 @@ name: Build RPM and DEB
 on:
   push:
     branches: [ "main" ]
+    paths-ignore:
+      - 'artifacts/**'
 
 jobs:
   build:
