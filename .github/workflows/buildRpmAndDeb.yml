@@ -28,7 +28,7 @@ jobs:
 
         mkdir -p artifacts/rpms
         cp -r ~/rpmbuild/RPMS/* artifacts/rpms/
-        сp -r ~/rpmbuild/SRPMS/* artifacts/rpms/
+        cp -r ~/rpmbuild/SRPMS/* artifacts/rpms/
 
     - name: Build DEB
       run: |
