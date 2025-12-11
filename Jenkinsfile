@@ -67,7 +67,7 @@ stage('Install DEB and Run Script') {
          sh '''
         docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
             dpkg -i /home/jenkins/script.deb &&
-            /usr/bin/bin/script.sh 
+            /usr/bin/script.sh 
         "
         '''
     }
