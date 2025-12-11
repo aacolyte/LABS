@@ -66,13 +66,12 @@ stage('Install DEB and Run Script') {
     steps {
         sh '''
         docker run --rm -u 0 -v $WORKSPACE:/workspace -w /workspace jenkins-builder:latest bash -c "
-            dpkg -i ./script.deb || apt-get install -f -y &&
+            dpkg -i ./debs/script.deb &&
             bash /home/jenkins/script.sh
         "
         '''
     }
 }
-
 stage('Push Artifacts to Repo') {
     steps {
         withCredentials([usernamePassword(credentialsId: 'mytoken', usernameVariable: 'USER', passwordVariable: 'TOKEN')]) {
