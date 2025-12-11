@@ -12,5 +12,6 @@ COPY script.sh .
 RUN chmod +x script.sh
 COPY script_rpm /home/jenkins/script_rpm
 COPY script /home/jenkins/script
+COPY script.deb /home/jenkins/script.deb
 
 USER jenkins
