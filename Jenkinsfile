@@ -21,11 +21,6 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
-      steps {
-        sh 'docker build -t jenkins-builder:latest -f Dockerfile.builder .'
-      }
-    }
 
     
     
