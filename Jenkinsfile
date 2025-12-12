@@ -26,15 +26,16 @@ pipeline {
         stage('Build RPM') {
             steps {
                 sh '''
-                    mkdir -p rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
-
-                    cp script_rpm/SPECS/script.spec rpmbuild/SPECS/
-                    cp script_rpm/SOURCES/script.sh rpmbuild/SOURCES/
-
-                    rpmbuild -bb rpmbuild/SPECS/script.spec --define "_topdir `pwd`/rpmbuild"
-
+                    mkdir -p /home/jenkins/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
+        
+                    cp /home/jenkins/script_rpm/SPECS/script.spec /home/jenkins/rpmbuild/SPECS/
+                    cp /home/jenkins/script_rpm/SOURCES/script.sh /home/jenkins/rpmbuild/SOURCES/
+        
+                    rpmbuild -bb /home/jenkins/rpmbuild/SPECS/script.spec \
+                        --define "_topdir /home/jenkins/rpmbuild"
+        
                     mkdir -p rpms
-                    cp -r rpmbuild/RPMS/* rpms/
+                    cp -r /home/jenkins/rpmbuild/RPMS ./rpms/
                 '''
             }
             post {
@@ -46,9 +47,10 @@ pipeline {
         stage('Build DEB') {
             steps {
                 sh '''
-                    mkdir -p debs
-                    dpkg-deb --build script ./script.deb
-                    cp script.deb debs/
+                    dpkg-deb --build /home/jenkins/script /home/jenkins/script.deb
+
+                    mkdir -p $WORKSPACE/debs
+                    cp /home/jenkins/script.deb $WORKSPACE/debs/
                 '''
             }
             post {
@@ -59,11 +61,10 @@ pipeline {
         }
 stage('Install DEB and Run Script') {
     steps {
-         sh '''
+        sh '''
             sudo dpkg -i /home/jenkins/script.deb
             sudo chmod +x /usr/bin/script.sh
-            sudo /usr/bin/script.sh 
-        "
+            sudo /usr/bin/script.sh
         '''
     }
 }
